@@ -29,14 +29,36 @@
         group: root
         mode: "0755"
 
+    - name: Read the base sdboot-manage configuration
+      ansible.builtin.slurp:
+        src: /etc/sdboot-manage.conf
+      register: sdboot_base_conf
+
+    # Only options that are not yet in the base LINUX_OPTIONS are added, so no parameter appears twice.
+    - name: Determine the missing kernel options
+      ansible.builtin.set_fact:
+        missing_kernel_options: >-
+          {{ kernel_options | reject('in', base_options.split()) | list }}
+      vars:
+        base_options: >-
+          {{ sdboot_base_conf.content | b64decode | regex_findall('(?m)^LINUX_OPTIONS="(.*)"$') | first | default('') }}
+
     - name: Deploy kernel options drop-in
       ansible.builtin.copy:
         dest: /etc/sdboot-manage.conf.d/99-kos.conf
         content: |
-          LINUX_OPTIONS+=" {{ kernel_options | join(' ') }}"
+          LINUX_OPTIONS+=" {{ missing_kernel_options | join(' ') }}"
         owner: root
         group: root
         mode: "0644"
+      when: missing_kernel_options | length > 0
+      notify: Regenerate systemd-boot entries
+
+    - name: Remove the kernel options drop-in when the base configuration has everything
+      ansible.builtin.file:
+        path: /etc/sdboot-manage.conf.d/99-kos.conf
+        state: absent
+      when: missing_kernel_options | length == 0
       notify: Regenerate systemd-boot entries
 
     # -------------------------------------------------------------------------
