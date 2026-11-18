@@ -1,0 +1,99 @@
+#!/usr/bin/env ansible-playbook
+---
+# Build tooling for https://github.com/nicenemo/nachtgespenst (PlatformIO firmware + JBang tools).
+# See that repo's docs/wiki/tooling.md: PlatformIO is project-local (.pio/venv), JBang fetches its own JDK.
+- name: Install Nachtgespenst Build Tooling
+  hosts: systems
+  become: true
+
+  tasks:
+    # -------------------------------------------------------------------------
+    # 1. System packages
+    # -------------------------------------------------------------------------
+    - name: Install build prerequisites
+      community.general.pacman:
+        name:
+          - python
+          - python-pip
+          - git
+          - cmake
+          - ninja
+          - unzip
+          - jdk-openjdk
+          - v4l-utils
+          - esptool
+        state: present
+
+    # -------------------------------------------------------------------------
+    # 2. Serial access to the M5Stack boards
+    # -------------------------------------------------------------------------
+    - name: Add target user to uucp (serial ports)
+      ansible.builtin.user:
+        name: "{{ target_user }}"
+        groups: uucp
+        append: true
+
+    - name: Install udev rules for the ESP32 boards
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../files/99-kos-esp32-udev.rules"
+        dest: /etc/udev/rules.d/99-kos-esp32.rules
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Reload udev
+
+    # -------------------------------------------------------------------------
+    # 3. JBang (system-wide, replaces the hand-unzipped ~/jbinst)
+    # -------------------------------------------------------------------------
+    - name: Download JBang
+      ansible.builtin.get_url:
+        url: https://github.com/jbangdev/jbang/releases/latest/download/jbang.zip
+        dest: /tmp/jbang.zip
+        mode: '0644'
+      register: jbang_download
+
+    - name: Unpack JBang
+      ansible.builtin.unarchive:
+        src: /tmp/jbang.zip
+        dest: /opt
+        remote_src: true
+        creates: "{{ jbang_install_dir }}/bin/jbang"
+
+    - name: Link jbang into /usr/local/bin
+      ansible.builtin.file:
+        src: "{{ jbang_install_dir }}/bin/jbang"
+        dest: /usr/local/bin/jbang
+        state: link
+
+    # -------------------------------------------------------------------------
+    # 4. Project checkout and project-local PlatformIO (as the target user)
+    # -------------------------------------------------------------------------
+    - name: Ensure the Projects directory exists
+      ansible.builtin.file:
+        path: "{{ nachtgespenst_dir | dirname }}"
+        state: directory
+        owner: "{{ target_user }}"
+        group: "{{ target_user }}"
+        mode: '0755'
+      when: nachtgespenst_clone | bool
+
+    - name: Clone Nachtgespenst
+      ansible.builtin.git:
+        repo: "{{ nachtgespenst_repo }}"
+        dest: "{{ nachtgespenst_dir }}"
+        update: false
+      become_user: "{{ target_user }}"
+      when: nachtgespenst_clone | bool
+
+    - name: Create the project-local PlatformIO virtualenv and install platformio
+      ansible.builtin.shell:
+        cmd: python3 -m venv .pio/venv && .pio/venv/bin/pip install --quiet platformio
+        chdir: "{{ nachtgespenst_dir }}"
+        creates: "{{ nachtgespenst_dir }}/.pio/venv/bin/pio"
+      become_user: "{{ target_user }}"
+      when: nachtgespenst_clone | bool and nachtgespenst_bootstrap_pio | bool
+
+  handlers:
+    - name: Reload udev
+      ansible.builtin.command: udevadm control --reload-rules
+      changed_when: true

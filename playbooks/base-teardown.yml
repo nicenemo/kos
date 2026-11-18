@@ -1,0 +1,20 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Revert Base System Configuration
+  hosts: systems
+  become: true
+
+  tasks:
+    - name: Remove editor profile file
+      ansible.builtin.file:
+        path: /etc/profile.d/editor.sh
+        state: absent
+
+    # Packages such as git, base-devel and networkmanager are left installed on purpose: removing them
+    # would break the system. Only the extras this repo added are removed.
+    - name: Remove sandbox helper packages
+      community.general.pacman:
+        name:
+          - bubblewrap
+          - socat
+        state: absent

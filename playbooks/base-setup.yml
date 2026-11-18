@@ -1,0 +1,48 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Apply Base System Setup
+  hosts: systems
+  become: true
+
+  tasks:
+    - name: Initialize pacman keyring if missing
+      ansible.builtin.command:
+        cmd: pacman-key --init
+        creates: /etc/pacman.d/gnupg/trustdb.gpg
+
+    - name: Populate Arch and CachyOS keyrings
+      ansible.builtin.command:
+        cmd: pacman-key --populate archlinux cachyos
+      changed_when: false
+
+    - name: Refresh databases and update keyrings
+      ansible.builtin.command:
+        cmd: pacman -Sy --noconfirm archlinux-keyring cachyos-keyring
+      changed_when: true
+
+    - name: Upgrade all system packages
+      ansible.builtin.command:
+        cmd: pacman -Syu --noconfirm
+      register: pacman_upgrade_result
+      changed_when: "'there is nothing to do' not in pacman_upgrade_result.stdout"
+
+    - name: Install common packages
+      community.general.pacman:
+        name: "{{ common_packages }}"
+        state: present
+
+    - name: Ensure target user belongs to the required groups
+      ansible.builtin.user:
+        name: "{{ target_user }}"
+        groups: wheel,input,audio,video,render
+        append: true
+
+    - name: Set Neovim as global default editor
+      ansible.builtin.copy:
+        dest: /etc/profile.d/editor.sh
+        content: |
+          export EDITOR=nvim
+          export VISUAL=nvim
+        owner: root
+        group: root
+        mode: '0644'

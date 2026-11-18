@@ -1,0 +1,23 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Revert Intel Graphics Configuration
+  hosts: systems
+  become: true
+
+  tasks:
+    - name: Remove configuration files
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/environment.d/99-kos-vaapi.conf
+        - /etc/modprobe.d/99-kos-i915.conf
+
+    # mesa stays: the desktop depends on it.
+    - name: Remove diagnostic and VA-API packages
+      community.general.pacman:
+        name:
+          - libva-utils
+          - intel-gpu-tools
+          - vulkan-tools
+        state: absent

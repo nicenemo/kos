@@ -1,0 +1,27 @@
+---
+all:
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+    common_packages:
+      - neovim
+      - tmux
+      - btop
+      - wget
+      - git
+      - base-devel
+      - networkmanager
+      - bubblewrap
+      - socat
+    jbang_install_dir: /opt/jbang
+    nachtgespenst_repo: https://github.com/nicenemo/nachtgespenst.git
+    nachtgespenst_dir: "/home/{{ target_user }}/Projects/Nachtgespenst"
+    nachtgespenst_clone: true
+    nachtgespenst_bootstrap_pio: true
+
+  children:
+    systems:
+      hosts:
+        kos:
+          ansible_connection: local
+          ansible_host: 127.0.0.1
+          target_user: kruse

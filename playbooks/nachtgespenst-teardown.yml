@@ -1,0 +1,38 @@
+#!/usr/bin/env ansible-playbook
+---
+# The Nachtgespenst checkout is never deleted (it holds your work); only the tooling this repo installed.
+- name: Remove Nachtgespenst Build Tooling
+  hosts: systems
+  become: true
+
+  tasks:
+    - name: Remove JBang
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /usr/local/bin/jbang
+        - "{{ jbang_install_dir }}"
+        - /tmp/jbang.zip
+
+    - name: Remove udev rules
+      ansible.builtin.file:
+        path: /etc/udev/rules.d/99-kos-esp32.rules
+        state: absent
+      notify: Reload udev
+
+    - name: Remove the project-local PlatformIO virtualenv
+      ansible.builtin.file:
+        path: "{{ nachtgespenst_dir }}/.pio/venv"
+        state: absent
+      become_user: "{{ target_user }}"
+
+    - name: Remove esptool
+      community.general.pacman:
+        name: esptool
+        state: absent
+
+  handlers:
+    - name: Reload udev
+      ansible.builtin.command: udevadm control --reload-rules
+      changed_when: true

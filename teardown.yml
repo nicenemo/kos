@@ -1,0 +1,25 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Import Nachtgespenst Build Tooling Teardown
+  ansible.builtin.import_playbook: playbooks/nachtgespenst-teardown.yml
+
+- name: Import Docker Teardown
+  ansible.builtin.import_playbook: playbooks/docker-teardown.yml
+
+- name: Import Chrome Teardown
+  ansible.builtin.import_playbook: playbooks/chrome-teardown.yml
+
+- name: Import Flatpak Teardown
+  ansible.builtin.import_playbook: playbooks/flatpak-teardown.yml
+
+- name: Import Laptop Teardown
+  ansible.builtin.import_playbook: playbooks/laptop-teardown.yml
+
+- name: Import Intel iGPU Teardown
+  ansible.builtin.import_playbook: playbooks/intel-gpu-teardown.yml
+
+- name: Import Kernel and Microcode Teardown
+  ansible.builtin.import_playbook: playbooks/kernel-teardown.yml
+
+- name: Import Base System Teardown
+  ansible.builtin.import_playbook: playbooks/base-teardown.yml

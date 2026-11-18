@@ -1,0 +1,23 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Apply ThinkPad T450s Laptop Settings
+  hosts: systems
+  become: true
+
+  tasks:
+    - name: Install thermald and webcam / USB diagnostics
+      community.general.pacman:
+        name:
+          - thermald
+          - v4l-utils
+          - usbutils
+        state: present
+
+    - name: Enable thermald and weekly TRIM
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+      loop:
+        - thermald.service
+        - fstrim.timer

@@ -1,0 +1,18 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Revert Laptop Settings
+  hosts: systems
+  become: true
+
+  tasks:
+    - name: Disable thermald
+      ansible.builtin.systemd:
+        name: thermald.service
+        enabled: false
+        state: stopped
+      failed_when: false
+
+    - name: Remove thermald
+      community.general.pacman:
+        name: thermald
+        state: absent

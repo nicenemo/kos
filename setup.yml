@@ -1,0 +1,26 @@
+#!/usr/bin/env ansible-playbook
+---
+# kos: ThinkPad T450s (Broadwell CPU + HD Graphics 5500, no discrete GPU), CachyOS
+- name: Import Base Setup
+  ansible.builtin.import_playbook: playbooks/base-setup.yml
+
+- name: Import Kernel and Microcode Setup
+  ansible.builtin.import_playbook: playbooks/kernel-setup.yml
+
+- name: Import Intel iGPU Setup
+  ansible.builtin.import_playbook: playbooks/intel-gpu-setup.yml
+
+- name: Import Laptop Setup
+  ansible.builtin.import_playbook: playbooks/laptop-setup.yml
+
+- name: Import Flatpak Setup
+  ansible.builtin.import_playbook: playbooks/flatpak-setup.yml
+
+- name: Import Chrome Setup
+  ansible.builtin.import_playbook: playbooks/chrome-setup.yml
+
+- name: Import Docker Setup
+  ansible.builtin.import_playbook: playbooks/docker-setup.yml
+
+- name: Import Nachtgespenst Build Tooling Setup
+  ansible.builtin.import_playbook: playbooks/nachtgespenst-setup.yml

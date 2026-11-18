@@ -1,0 +1,20 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Install Intel Microcode and Optimized CachyOS Kernel
+  hosts: systems
+  become: true
+
+  tasks:
+    - name: Install CachyOS kernel, headers and Intel microcode (stock linux kernel stays as fallback)
+      community.general.pacman:
+        name:
+          - linux-cachyos
+          - linux-cachyos-headers
+          - intel-ucode
+        state: present
+      notify: Rebuild initramfs
+
+  handlers:
+    - name: Rebuild initramfs
+      ansible.builtin.command: mkinitcpio -P
+      changed_when: true
