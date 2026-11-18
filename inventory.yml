@@ -22,6 +22,7 @@ all:
       - yamllint
       - markdownlint-cli2
       - actionlint
+      - osv-scanner
     # systemd-boot is managed with sdboot-manage (systemd-boot-manager): entries are named after the kernel
     kernel_packages:
       - linux-cachyos

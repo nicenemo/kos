@@ -22,4 +22,5 @@
           - yamllint
           - markdownlint-cli2
           - actionlint
+          - osv-scanner
         state: absent
