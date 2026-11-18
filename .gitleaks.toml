@@ -10,6 +10,12 @@ description = "Ansible vault password file contents or inline password"
 regex = '''(?i)(vault[_-]?pass(word)?)\s*[:=]\s*['"]?[^\s'"]{6,}'''
 keywords = ["vault"]
 
-[allowlist]
-description = "Public keys and examples are not secrets"
+[[allowlists]]
+description = "Public keys are not secrets"
 paths = ['''\.pub$''']
+
+# A line that only references a Jinja variable (for example a password variable in a test command) is not a secret
+[[allowlists]]
+description = "Jinja variable references"
+regexTarget = "line"
+regexes = ['''\{\{[^}]*\}\}''']
