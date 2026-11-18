@@ -56,5 +56,7 @@ There are no tests; the teardown, setup cycle is the idempotency test. All three
 * **Copying from other repositories**: samos is partly derived from multiberry and still contains wrong references to
   it (host names, users, domains). When copying a playbook, remove host-specific names, `secondary_user` and
   `firestorm_users`, and grep for `multiberry`, `samos` and `hanskruse` before committing.
+* **Project page**: `index.html` (the only tracked HTML file, `*.html` is gitignored otherwise) is deployed to GitHub
+  Pages by `.github/workflows/static.yml`. Keep it short and plain; keep it in step with the README playbook list.
 * **Docs**: new decisions get the next ADR number in `adr/` and a line in the README list; how-to content goes in
   `wiki/`.

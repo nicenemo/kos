@@ -71,6 +71,11 @@ Run `./githooks-setup.sh` once per checkout. The `pre-commit` hook in `.githooks
 changes and `yamllint` ([ADR 0011](./adr/0011-secret-scanning-with-pre-commit-hook.md)). Scan the whole history with
 `gitleaks git --redact`.
 
+## Project page and licence
+
+`index.html` is published with GitHub Pages by `.github/workflows/static.yml` (only that file is deployed). The
+repository is public and licensed under the [MIT License](./LICENSE), (c) 2026 Hans Kruse.
+
 ## Documentation
 
 * [Wiki](./wiki/): [first run](./wiki/first-run.md), [troubleshooting](./wiki/troubleshooting.md),
