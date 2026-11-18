@@ -1,8 +1,8 @@
 #!/usr/bin/env ansible-playbook
 ---
-# Build tooling for https://github.com/nicenemo/nachtgespenst (PlatformIO firmware + JBang tools).
-# The repo itself is not cloned here; see its docs/wiki/tooling.md (PlatformIO venv per project, JBang fetches a JDK).
-- name: Install Nachtgespenst Build Tooling
+# Development tooling: PlatformIO, esptool, serial udev rules for ESP32 boards (M5Stack), JBang, JDK and build tools.
+# Used for e.g. https://github.com/nicenemo/nachtgespenst, which is not cloned here.
+- name: Install Development Tooling
   hosts: systems
   become: true
 

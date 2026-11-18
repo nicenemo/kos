@@ -1,7 +1,7 @@
 #!/usr/bin/env ansible-playbook
 ---
-- name: Import Nachtgespenst Build Tooling Teardown
-  ansible.builtin.import_playbook: playbooks/nachtgespenst-teardown.yml
+- name: Import Development Tooling Teardown
+  ansible.builtin.import_playbook: playbooks/dev-teardown.yml
 
 - name: Import Docker Teardown
   ansible.builtin.import_playbook: playbooks/docker-teardown.yml

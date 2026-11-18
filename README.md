@@ -16,9 +16,9 @@ discrete GPU, 12 GB RAM) running CachyOS with KDE Plasma. Layout and conventions
 | `flatpak-setup.yml`, `chrome-setup.yml` | Flatpak + Flathub, Google Chrome (as in samos) |
 | `desktop-setup.yml` | Vivaldi, Proton Mail, Moonlight |
 | `docker-setup.yml` | Docker + compose, `/opt/compose` |
-| `nachtgespenst-setup.yml` | build tooling for [nachtgespenst](https://github.com/nicenemo/nachtgespenst), no clone |
+| `dev-setup.yml` | development tooling: PlatformIO, esptool, JBang, JDK, CMake/Ninja, ESP32 serial udev rules |
 
-`nachtgespenst-setup.yml` installs `platformio-core` (+ its udev rules), esptool, CMake/Ninja, the JDK, system-wide
+`dev-setup.yml` installs `platformio-core` (+ its udev rules), esptool, CMake/Ninja, the JDK, system-wide
 JBang (`/opt/jbang`), the udev rules for the M5Stack Core2/CoreS3 serial ports (`files/99-kos-esp32-udev.rules`) and
 adds your user to `uucp`. Log out and in again afterwards so the group applies.
 
@@ -39,7 +39,7 @@ enables `sshd`, restricted to localhost with key-only login.
 ./teardown.yml                  # revert (keeps system-critical packages)
 ./ansible-user-teardown.yml -K  # remove myansibleuser and the localhost sshd config
 ./controller-teardown.yml       # delete the keypair
-ansible-playbook playbooks/nachtgespenst-setup.yml   # a single part
+ansible-playbook playbooks/dev-setup.yml   # a single part
 ansible-playbook setup.yml --check --diff            # dry run
 ```
 

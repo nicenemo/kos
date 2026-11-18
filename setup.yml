@@ -25,5 +25,5 @@
 - name: Import Docker Setup
   ansible.builtin.import_playbook: playbooks/docker-setup.yml
 
-- name: Import Nachtgespenst Build Tooling Setup
-  ansible.builtin.import_playbook: playbooks/nachtgespenst-setup.yml
+- name: Import Development Tooling Setup
+  ansible.builtin.import_playbook: playbooks/dev-setup.yml
