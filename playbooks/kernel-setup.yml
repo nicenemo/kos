@@ -27,7 +27,7 @@
         state: directory
         owner: root
         group: root
-        mode: "0755"
+        mode: '0755'
 
     - name: Read the kernel tuning parameters
       ansible.builtin.set_fact:
@@ -56,7 +56,7 @@
           LINUX_OPTIONS+=" {{ missing_kernel_options | join(' ') }}"
         owner: root
         group: root
-        mode: "0644"
+        mode: '0644'
       when: missing_kernel_options | length > 0
       notify: Regenerate systemd-boot entries
 
@@ -81,7 +81,7 @@
         regexp: '^default\s'
         line: "default {{ boot_default_entry }}"
         insertbefore: BOF
-        mode: "0755"
+        mode: '0755'
       when: loader_conf_stat.stat.exists
 
     # -------------------------------------------------------------------------
@@ -93,7 +93,7 @@
         dest: /etc/sysctl.d/99-kos.conf
         owner: root
         group: root
-        mode: "0644"
+        mode: '0644'
       notify: Apply sysctl settings
 
     # -------------------------------------------------------------------------
@@ -105,7 +105,7 @@
         dest: /etc/modprobe.d/99-kos-i915.conf
         owner: root
         group: root
-        mode: "0644"
+        mode: '0644'
       notify: Rebuild initramfs
 
     - name: Ensure the i915 module is loaded at boot
@@ -114,7 +114,7 @@
         dest: /etc/modules-load.d/igpu.conf
         owner: root
         group: root
-        mode: "0644"
+        mode: '0644'
 
     # -------------------------------------------------------------------------
     # 5. Verification (no automatic reboot: this play runs on the machine itself)

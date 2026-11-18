@@ -26,7 +26,7 @@
           KbdInteractiveAuthentication no
         owner: root
         group: root
-        mode: "0644"
+        mode: '0644'
       notify: Restart sshd
 
     - name: Enable and start sshd
@@ -54,8 +54,8 @@
         content: "{{ ansible_management_user }} ALL=(ALL) NOPASSWD: ALL\n"
         owner: root
         group: root
-        mode: "0440"
-        validate: "visudo -cf %s"
+        mode: '0440'
+        validate: 'visudo -cf %s'
 
   handlers:
     - name: Restart sshd

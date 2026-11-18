@@ -30,3 +30,6 @@
 
 - name: Import Development Tooling Setup
   ansible.builtin.import_playbook: playbooks/dev-setup.yml
+
+- name: Import jdtls Setup
+  ansible.builtin.import_playbook: playbooks/jdtls-setup.yml

@@ -30,6 +30,7 @@ do not apply to this hardware (Elasticsearch, Kibana, gaming, Nvidia, local AI) 
 | `docker-setup.yml` | Docker + compose, `/opt/compose` |
 | `udev-setup.yml` | udev rules and `uucp` for ESP32 serial adapters and the Nachtgespenst hidraw device |
 | `dev-setup.yml` | development tooling: PlatformIO, esptool, JBang, JDK, CMake/Ninja |
+| `jdtls-setup.yml` | jdtls (Eclipse JDT language server) as a locally built pacman package: `jdtls-download`, `-package`, `-distribute`, `-install`, `-remove-package` |
 
 Every `*-setup.yml` has a `*-teardown.yml`. `setup.yml` and `teardown.yml` import them in order and reverse order.
 
@@ -55,9 +56,9 @@ Step by step: [wiki/first-run.md](./wiki/first-run.md).
 ## Configuration
 
 All settings are in `inventory.yml`: `common_packages`, `kernel_packages`, `boot_default_entry`,
-`desktop_packages`, `battery_start_threshold` / `battery_stop_threshold`, `jbang_install_dir`. Static files are in
-`files/` (kernel parameters in `kos-tuning.conf`, i915 options, iGPU environment, sysctl, udev rules for ESP32
-boards and the Nachtgespenst hidraw device).
+`desktop_packages`, `battery_start_threshold` / `battery_stop_threshold`, `jbang_install_dir`, `jdtls_version`.
+Static files are in `files/` (kernel parameters in `kos-tuning.conf`, i915 options, iGPU environment, sysctl, udev rules
+for ESP32 boards and the Nachtgespenst hidraw device).
 
 ## Linting
 
@@ -70,7 +71,7 @@ markdownlint-cli2 "**/*.md"
 ## Secret scanning
 
 Run `./githooks-setup.sh` once per checkout. The `pre-commit` hook in `.githooks/` runs `gitleaks` on the staged
-changes and `yamllint`; the `pre-push` hook runs `trufflehog` on the commits being pushed
+changes, `yamllint` and `ansible-lint`; the `pre-push` hook runs `trufflehog` on the commits being pushed
 ([ADR 0011](./adr/0011-secret-scanning-with-pre-commit-hook.md)). Scan the whole history with
 `gitleaks git --redact` and `trufflehog git file://$PWD`.
 
@@ -99,3 +100,5 @@ repositories (kos, mikmakmuk, multiberry, samos). The repository is public and l
   * [0010 Scope and excluded workloads](./adr/0010-scope-and-excluded-workloads.md)
   * [0011 Secret scanning with a pre-commit hook](./adr/0011-secret-scanning-with-pre-commit-hook.md)
   * [0012 Separate udev playbooks](./adr/0012-separate-udev-playbooks.md)
+  * [0013 jdtls as a locally built package](./adr/0013-jdtls-as-locally-built-package.md)
+  * [0014 Linters in the pre-commit hook](./adr/0014-linters-in-the-pre-commit-hook.md)

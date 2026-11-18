@@ -31,8 +31,8 @@ yamllint .                      # .yamllint, 120 columns
 markdownlint-cli2 "**/*.md"     # .markdownlint-cli2.yaml (ignores playbooks/, asterisk lists, 120 columns)
 ```
 
-Secrets: the tracked `pre-commit` hook (`.githooks/`, enable with `./githooks-setup.sh`) runs `gitleaks git --staged`
-and `yamllint`; `.githooks/pre-push` runs `trufflehog` (ADR 0011).
+Secrets: the tracked `pre-commit` hook (`.githooks/`, enable with `./githooks-setup.sh`) runs `gitleaks git --staged`,
+`yamllint` and `ansible-lint`; `.githooks/pre-push` runs `trufflehog` (ADR 0011).
 Never commit private keys, tokens or vault passwords; never bypass with `--no-verify`.
 
 There are no tests; the teardown, setup cycle is the idempotency test. All three linters must pass before a commit.
@@ -54,8 +54,10 @@ There are no tests; the teardown, setup cycle is the idempotency test. All three
 * **Path resolution**: playbooks under `playbooks/` define `project_root: "{{ playbook_dir | dirname }}"` to reach
   `files/`; do not use relative `src` paths (ansible-lint `no-relative-paths`).
 * **Conventions**: Arch/CachyOS only (`community.general.pacman`), FQCN module names, tasks grouped under numbered
-  `# ----` comments where a playbook is long, double-quoted octal modes, `changed_when` on command tasks, `become` set
-  whenever `become_user` is used.
+  `# ----` comments where a playbook is long, `changed_when` on command tasks, `become` set whenever `become_user` is
+  used. **Quotes**: single quotes for strings without templating (`mode: '0644'`, `name: 'Install packages'`), double
+  quotes only when the value contains Jinja (`{{ }}`, `{% %}`) or a single quote; the same in samos, multiberry and
+  mikmakmuk.
 * **Copying from other repositories**: samos is partly derived from multiberry and still contains wrong references to
   it (host names, users, domains). When copying a playbook, remove host-specific names, `secondary_user` and
   `firestorm_users`, and grep for `multiberry`, `samos` and `hanskruse` before committing.

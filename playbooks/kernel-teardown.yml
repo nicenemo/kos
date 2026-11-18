@@ -20,7 +20,7 @@
         regexp: '^default\s'
         line: "default {{ boot_fallback_entry }}"
         insertbefore: BOF
-        mode: "0755"
+        mode: '0755'
       when: loader_conf_stat.stat.exists
 
     - name: Remove configuration files

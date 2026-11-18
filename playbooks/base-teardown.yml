@@ -12,10 +12,13 @@
 
     # Packages such as git, base-devel and networkmanager are left installed on purpose: removing them
     # would break the system. Only the extras this repo added are removed.
-    - name: Remove sandbox helper packages
+    - name: Remove sandbox helper and linting packages
       community.general.pacman:
         name:
           - bubblewrap
           - socat
           - gitleaks
+          - ansible-lint
+          - yamllint
+          - markdownlint-cli2
         state: absent

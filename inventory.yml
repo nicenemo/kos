@@ -18,6 +18,9 @@ all:
       - bubblewrap
       - socat
       - gitleaks
+      - ansible-lint
+      - yamllint
+      - markdownlint-cli2
     # systemd-boot is managed with sdboot-manage (systemd-boot-manager): entries are named after the kernel
     kernel_packages:
       - linux-cachyos
@@ -33,6 +36,7 @@ all:
     battery_start_threshold: 75
     battery_stop_threshold: 80
     jbang_install_dir: /opt/jbang
+    jdtls_version: 1.63.0
 
   children:
     systems:

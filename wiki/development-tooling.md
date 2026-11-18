@@ -9,6 +9,8 @@
 | `esptool` | `esptool` | flash and inspect ESP32 chips |
 | `jbang` | `/opt/jbang`, linked in `/usr/local/bin` | run single-file Java tools; downloads the JDK a script asks for |
 | JDK, CMake, Ninja | pacman | build prerequisites |
+| `jdtls` | local pacman package from `jdtls-setup.yml` | Java language server for editors |
+| `ansible-lint`, `yamllint`, `markdownlint-cli2`, `gitleaks` | pacman, `common_packages` | linters and the pre-commit hook |
 
 Projects may still keep PlatformIO inside the project. For nachtgespenst this means
 `python3 -m venv .pio/venv && .pio/venv/bin/pip install platformio` in its own checkout; see that repository's

@@ -32,7 +32,7 @@
       ansible.builtin.get_url:
         url: https://github.com/jbangdev/jbang/releases/latest/download/jbang.zip
         dest: /var/cache/jbang.zip
-        mode: "0644"
+        mode: '0644'
 
     - name: Unpack JBang
       ansible.builtin.unarchive:

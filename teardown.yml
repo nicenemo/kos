@@ -1,5 +1,8 @@
 #!/usr/bin/env ansible-playbook
 ---
+- name: Import jdtls Teardown
+  ansible.builtin.import_playbook: playbooks/jdtls-teardown.yml
+
 - name: Import Development Tooling Teardown
   ansible.builtin.import_playbook: playbooks/dev-teardown.yml
 

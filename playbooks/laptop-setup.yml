@@ -41,7 +41,7 @@
           STOP_CHARGE_THRESH_BAT0={{ battery_stop_threshold }}
         owner: root
         group: root
-        mode: "0644"
+        mode: '0644'
       notify: Apply TLP settings
 
     - name: Enable TLP, thermald and weekly TRIM

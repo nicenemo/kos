@@ -5,5 +5,8 @@ exclude_paths:
   - .git/
   - .github/
   - .ansible/
+  - credentials/
+  - certs/
+  - build/
 warn_list:
   - experimental
