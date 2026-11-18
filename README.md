@@ -38,7 +38,7 @@ ansible-playbook playbooks/nachtgespenst-setup.yml   # a single part
 ansible-playbook setup.yml --check --diff    # dry run
 ```
 
-Requires `ansible` (`ansible-galaxy collection install -r requirements.yml`), `community.general`, `community.docker` and `ansible.posix` (already present on kos).
+Requires `ansible` plus the collections in `requirements.yml` (`ansible-galaxy collection install -r requirements.yml`).
 
 ## Notes
 
