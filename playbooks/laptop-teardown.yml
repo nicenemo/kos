@@ -5,6 +5,19 @@
   become: true
 
   tasks:
+    - name: Remove the kos TLP drop-in
+      ansible.builtin.file:
+        path: /etc/tlp.d/99-kos.conf
+        state: absent
+
+    - name: Unmask the rfkill units
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        masked: false
+      loop:
+        - systemd-rfkill.service
+        - systemd-rfkill.socket
+
     - name: Disable thermald
       ansible.builtin.systemd:
         name: thermald.service
@@ -16,3 +29,5 @@
       community.general.pacman:
         name: thermald
         state: absent
+
+    # TLP and the power-profiles-daemon mask stay: that is how this machine ran before these playbooks.

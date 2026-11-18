@@ -1,23 +1,60 @@
 #!/usr/bin/env ansible-playbook
 ---
+# Power management for the T450s: TLP (power, battery thresholds via thinkpad_acpi) + thermald (thermal).
+# They complement each other. power-profiles-daemon conflicts with TLP and stays masked.
 - name: Apply ThinkPad T450s Laptop Settings
   hosts: systems
   become: true
 
   tasks:
-    - name: Install thermald and webcam / USB diagnostics
+    - name: Install TLP, thermald and webcam / USB diagnostics
       community.general.pacman:
         name:
+          - tlp
           - thermald
           - v4l-utils
           - usbutils
         state: present
 
-    - name: Enable thermald and weekly TRIM
+    - name: Mask power-profiles-daemon (conflicts with TLP)
+      ansible.builtin.systemd:
+        name: power-profiles-daemon.service
+        masked: true
+        enabled: false
+        state: stopped
+      failed_when: false
+
+    - name: Mask the rfkill units TLP replaces
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+        masked: true
+      loop:
+        - systemd-rfkill.service
+        - systemd-rfkill.socket
+
+    - name: Configure TLP battery charge thresholds (internal battery BAT0)
+      ansible.builtin.copy:
+        dest: /etc/tlp.d/99-kos.conf
+        content: |
+          # Managed by the kos playbooks (laptop-setup.yml)
+          START_CHARGE_THRESH_BAT0={{ battery_start_threshold }}
+          STOP_CHARGE_THRESH_BAT0={{ battery_stop_threshold }}
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Apply TLP settings
+
+    - name: Enable TLP, thermald and weekly TRIM
       ansible.builtin.systemd:
         name: "{{ item }}"
         enabled: true
         state: started
       loop:
+        - tlp.service
         - thermald.service
         - fstrim.timer
+
+  handlers:
+    - name: Apply TLP settings
+      ansible.builtin.command: tlp start
+      changed_when: true

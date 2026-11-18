@@ -12,7 +12,7 @@ discrete GPU, 12 GB RAM) running CachyOS with KDE Plasma. Layout and conventions
 | `base-setup.yml` | keyrings, full upgrade, common packages (incl. neovim, jq), user groups, `nvim` as editor |
 | `kernel-setup.yml` | `linux-cachyos` + headers, `intel-ucode`, systemd-boot via `sdboot-manage`, default entry, sysctl |
 | `intel-gpu-setup.yml` | Mesa (iris), `vulkan-intel`, i965 VA-API (Broadwell is not supported by intel-media-driver), i915 |
-| `laptop-setup.yml` | `thermald`, weekly `fstrim.timer`, v4l/usb tools |
+| `laptop-setup.yml` | TLP (battery thresholds, rfkill) + `thermald`, PPD masked, weekly `fstrim.timer`, v4l/usb tools |
 | `flatpak-setup.yml`, `chrome-setup.yml` | Flatpak + Flathub, Google Chrome (as in samos) |
 | `desktop-setup.yml` | Vivaldi, Proton Mail, Moonlight |
 | `docker-setup.yml` | Docker + compose, `/opt/compose` |
@@ -47,5 +47,6 @@ Requires `ansible` plus the collections in `requirements.yml` (`ansible-galaxy c
 
 ## Notes
 
-* The CPU governor stays on power-profiles-daemon (unlike the always-on mikmakmuk nodes, this is a laptop).
+* Power: TLP and thermald run together; power-profiles-daemon is masked (conflicts with TLP). Battery limit 75-80 %
+  (`battery_start_threshold` / `battery_stop_threshold`); the governor stays `schedutil` (laptop, unlike mikmakmuk).
 * Lint: `ansible-lint`, `yamllint .`, `markdownlint-cli2 "**/*.md"`

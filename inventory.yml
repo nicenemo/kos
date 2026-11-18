@@ -32,6 +32,8 @@ all:
       - vivaldi-ffmpeg-codecs
       - proton-mail-bin
       - moonlight-qt
+    battery_start_threshold: 75
+    battery_stop_threshold: 80
     jbang_install_dir: /opt/jbang
 
   children:
