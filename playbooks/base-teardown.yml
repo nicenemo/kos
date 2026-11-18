@@ -17,4 +17,5 @@
         name:
           - bubblewrap
           - socat
+          - gitleaks
         state: absent
