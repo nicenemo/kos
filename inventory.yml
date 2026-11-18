@@ -25,9 +25,6 @@ all:
       - intel-ucode
     boot_default_entry: linux-cachyos.conf
     boot_fallback_entry: linux.conf
-    kernel_options:
-      - mitigations=off
-      - nowatchdog
     desktop_packages:
       - vivaldi
       - vivaldi-ffmpeg-codecs

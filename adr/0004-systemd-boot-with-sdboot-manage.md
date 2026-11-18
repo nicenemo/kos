@@ -14,8 +14,10 @@ kernel is installed or removed.
 
 * Never edit boot entries or `/etc/kernel/cmdline` directly.
 * Extra kernel options go in a drop-in, `/etc/sdboot-manage.conf.d/99-kos.conf` (`LINUX_OPTIONS+=`), fed by the
-  `kernel_options` inventory variable; the existing `/etc/sdboot-manage.conf` stays untouched. Options that the base
-  `LINUX_OPTIONS` already contains are not repeated, and the drop-in is removed when nothing is missing.
+  parameter list in `files/kos-tuning.conf` (one per line, as in mikmakmuk); the existing `/etc/sdboot-manage.conf`
+  stays untouched. Options that the base `LINUX_OPTIONS` already contains are not repeated, the drop-in is removed
+  when nothing is missing, and `kernel-setup.yml` reports parameters that still need a reboot (it does not reboot
+  the machine it runs on).
 * `DEFAULT_ENTRY` is `manual` in sdboot-manage, so the default kernel is set with a `default` line in
   `/boot/loader/loader.conf` (`boot_default_entry`, `linux-cachyos.conf`).
 * The stock `linux` kernel stays installed as fallback; the teardown points the default back at it before removing

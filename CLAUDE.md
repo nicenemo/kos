@@ -42,7 +42,7 @@ There are no tests; the teardown, setup cycle is the idempotency test. All three
 * **Orchestrators**: `setup.yml` and `teardown.yml` are `import_playbook` lists. Every `*-setup.yml` needs a matching
   `*-teardown.yml`; register both, teardown in reverse order. Teardowns keep system-critical packages.
 * **Inventory** (`inventory.yml`): group `systems`, host `kos` (SSH to 127.0.0.1), `target_user: kruse`. Package lists
-  and tunables are variables here (`common_packages`, `kernel_packages`, `kernel_options`, `desktop_packages`,
+  and tunables are variables here (`common_packages`, `kernel_packages`, `desktop_packages`,
   `boot_default_entry`, battery thresholds).
 * **Bootloader**: systemd-boot via `sdboot-manage` (ADR 0004), not Limine or `/etc/kernel/cmdline`. Kernel options go
   in `/etc/sdboot-manage.conf.d/99-kos.conf`; the default kernel is the `default` line in `/boot/loader/loader.conf`;

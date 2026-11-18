@@ -29,6 +29,12 @@
         group: root
         mode: "0755"
 
+    - name: Read the kernel tuning parameters
+      ansible.builtin.set_fact:
+        kernel_options: >-
+          {{ lookup('ansible.builtin.file', project_root ~ '/files/kos-tuning.conf').splitlines()
+          | map('trim') | reject('match', '(#|$)') | list }}
+
     - name: Read the base sdboot-manage configuration
       ansible.builtin.slurp:
         src: /etc/sdboot-manage.conf
@@ -89,6 +95,21 @@
         group: root
         mode: "0644"
       notify: Apply sysctl settings
+
+    # -------------------------------------------------------------------------
+    # 5. Verification (no automatic reboot: this play runs on the machine itself)
+    # -------------------------------------------------------------------------
+    - name: Read the running kernel command line
+      ansible.builtin.slurp:
+        src: /proc/cmdline
+      register: live_cmdline_raw
+
+    - name: Report parameters that need a reboot to become active
+      ansible.builtin.debug:
+        msg: >-
+          Reboot required: not yet in /proc/cmdline:
+          {{ kernel_options | difference((live_cmdline_raw.content | b64decode).split()) | join(' ') }}
+      when: kernel_options | difference((live_cmdline_raw.content | b64decode).split()) | length > 0
 
   handlers:
     - name: Rebuild initramfs

@@ -54,9 +54,10 @@ Step by step: [wiki/first-run.md](./wiki/first-run.md).
 
 ## Configuration
 
-All settings are in `inventory.yml`: `common_packages`, `kernel_packages`, `kernel_options`, `boot_default_entry`,
+All settings are in `inventory.yml`: `common_packages`, `kernel_packages`, `boot_default_entry`,
 `desktop_packages`, `battery_start_threshold` / `battery_stop_threshold`, `jbang_install_dir`. Static files are in
-`files/` (i915 options, iGPU environment, sysctl, udev rules for ESP32 boards and the Nachtgespenst hidraw device).
+`files/` (kernel parameters in `kos-tuning.conf`, i915 options, iGPU environment, sysctl, udev rules for ESP32
+boards and the Nachtgespenst hidraw device).
 
 ## Linting
 
