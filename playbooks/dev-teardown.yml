@@ -21,4 +21,5 @@
           - platformio-core-udev
           - esptool
           - hugo
+          - jekyll
         state: absent

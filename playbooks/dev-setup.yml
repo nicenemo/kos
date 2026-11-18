@@ -1,6 +1,6 @@
 #!/usr/bin/env ansible-playbook
 ---
-# Development tooling: PlatformIO, esptool, JBang, JDK, Hugo and build tools. udev rules are in udev-setup.yml.
+# Development tooling: PlatformIO, esptool, JBang, JDK, Hugo, Jekyll and build tools. udev rules are in udev-setup.yml.
 # Used for e.g. https://github.com/nicenemo/nachtgespenst, which is not cloned here.
 - name: Install Development Tooling
   hosts: systems
@@ -24,6 +24,7 @@
           - v4l-utils
           - esptool
           - hugo
+          - jekyll
         state: present
 
     # -------------------------------------------------------------------------
