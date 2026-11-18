@@ -1,14 +1,47 @@
 #!/usr/bin/env ansible-playbook
 ---
-- name: Revert Kernel Setup
+- name: Revert Kernel and systemd-boot Setup
   hosts: systems
   become: true
 
+  vars:
+    loader_conf: /boot/loader/loader.conf
+
   tasks:
-    # The stock `linux` kernel and intel-ucode stay: the machine must remain bootable.
+    # Boot the stock kernel again before the CachyOS kernel disappears.
+    - name: Check that loader.conf exists
+      ansible.builtin.stat:
+        path: "{{ loader_conf }}"
+      register: loader_conf_stat
+
+    - name: Boot the stock kernel by default again
+      ansible.builtin.lineinfile:
+        path: "{{ loader_conf }}"
+        regexp: '^default\s'
+        line: "default {{ boot_fallback_entry }}"
+        insertbefore: BOF
+        mode: "0755"
+      when: loader_conf_stat.stat.exists
+
+    - name: Remove configuration files
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/sdboot-manage.conf.d/99-kos.conf
+        - /etc/sysctl.d/99-kos.conf
+
+    # intel-ucode and systemd-boot-manager stay: the machine must remain bootable.
+    # The pacman hook removes the boot entries of the removed kernel.
     - name: Remove the CachyOS kernel packages
       community.general.pacman:
         name:
           - linux-cachyos
           - linux-cachyos-headers
         state: absent
+      notify: Regenerate systemd-boot entries
+
+  handlers:
+    - name: Regenerate systemd-boot entries
+      ansible.builtin.command: sdboot-manage gen
+      changed_when: true

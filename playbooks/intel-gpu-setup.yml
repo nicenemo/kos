@@ -4,31 +4,52 @@
   hosts: systems
   become: true
 
+  vars:
+    project_root: "{{ playbook_dir | dirname }}"
+
   tasks:
     # Broadwell (Gen8) is not supported by intel-media-driver (Gen9+); it needs the legacy i965 VA-API driver.
-    - name: Install Mesa, Vulkan and VA-API packages
+    - name: Install Mesa, Vulkan, VA-API and diagnostic packages
       community.general.pacman:
         name:
           - mesa
           - vulkan-intel
+          - vulkan-icd-loader
           - libva-intel-driver
           - libva-utils
-          - intel-gpu-tools
           - vulkan-tools
+          - clinfo
+          - intel-gpu-tools
         state: present
 
-    - name: Select the i965 VA-API driver system-wide
-      ansible.builtin.copy:
-        dest: /etc/environment.d/99-kos-vaapi.conf
-        content: "LIBVA_DRIVER_NAME=i965\n"
+    - name: Ensure /etc/environment.d exists
+      ansible.builtin.file:
+        path: /etc/environment.d
+        state: directory
         owner: root
         group: root
-        mode: '0644'
+        mode: "0755"
+
+    - name: Select the iris Mesa driver and i965 VA-API driver system-wide
+      ansible.builtin.copy:
+        src: "{{ project_root }}/files/99-kos-igpu-dri.conf"
+        dest: /etc/environment.d/99-kos-igpu-dri.conf
+        owner: root
+        group: root
+        mode: "0644"
 
     - name: Install i915 module options
       ansible.builtin.copy:
-        src: "{{ playbook_dir }}/../files/99-kos-i915.conf"
+        src: "{{ project_root }}/files/99-kos-i915.conf"
         dest: /etc/modprobe.d/99-kos-i915.conf
         owner: root
         group: root
-        mode: '0644'
+        mode: "0644"
+
+    - name: Ensure the i915 module is loaded at boot
+      ansible.builtin.copy:
+        content: "i915\n"
+        dest: /etc/modules-load.d/igpu.conf
+        owner: root
+        group: root
+        mode: "0644"

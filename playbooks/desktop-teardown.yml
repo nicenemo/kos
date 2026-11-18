@@ -1,0 +1,11 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Remove Desktop Applications
+  hosts: systems
+  become: true
+
+  tasks:
+    - name: Remove desktop applications (user data in the home directory is kept)
+      community.general.pacman:
+        name: "{{ desktop_packages }}"
+        state: absent

@@ -4,19 +4,32 @@ all:
     ansible_python_interpreter: /usr/bin/python3
     common_packages:
       - neovim
+      - jq
       - tmux
       - btop
       - wget
       - git
       - base-devel
       - networkmanager
+      - lm_sensors
       - bubblewrap
       - socat
+    # systemd-boot is managed with sdboot-manage (systemd-boot-manager): entries are named after the kernel
+    kernel_packages:
+      - linux-cachyos
+      - linux-cachyos-headers
+      - intel-ucode
+    boot_default_entry: linux-cachyos.conf
+    boot_fallback_entry: linux.conf
+    kernel_options:
+      - mitigations=off
+      - nowatchdog
+    desktop_packages:
+      - vivaldi
+      - vivaldi-ffmpeg-codecs
+      - proton-mail-bin
+      - moonlight-qt
     jbang_install_dir: /opt/jbang
-    nachtgespenst_repo: https://github.com/nicenemo/nachtgespenst.git
-    nachtgespenst_dir: "/home/{{ target_user }}/Projects/Nachtgespenst"
-    nachtgespenst_clone: true
-    nachtgespenst_bootstrap_pio: true
 
   children:
     systems:

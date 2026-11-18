@@ -1,0 +1,11 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Install Desktop Applications (Vivaldi, Proton Mail, Moonlight)
+  hosts: systems
+  become: true
+
+  tasks:
+    - name: Install desktop applications from the CachyOS and Arch repositories
+      community.general.pacman:
+        name: "{{ desktop_packages }}"
+        state: present

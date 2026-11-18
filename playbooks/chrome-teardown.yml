@@ -9,6 +9,10 @@
       - name: "{{ target_user }}"
         group: "{{ target_user }}"
     purge_user_data: true
+    chrome_user_data_dirs:
+      - .config/google-chrome
+      - .cache/google-chrome
+      - .var/app/com.google.Chrome
 
   tasks:
     # -------------------------------------------------------------------------
@@ -53,11 +57,7 @@
       ansible.builtin.file:
         path: "/home/{{ item[0].name }}/{{ item[1] }}"
         state: absent
-      loop: "{{ target_users | product([
-        '.config/google-chrome',
-        '.cache/google-chrome',
-        '.var/app/com.google.Chrome'
-      ]) | list }}"
+      loop: "{{ target_users | product(chrome_user_data_dirs) | list }}"
       when: purge_user_data | bool
 
     # -------------------------------------------------------------------------
@@ -73,6 +73,7 @@
     - name: Refresh KDE launcher cache after removal
       ansible.builtin.command:
         cmd: kbuildsycoca6 --noincremental
+      become: true
       become_user: "{{ item.name }}"
       loop: "{{ target_users }}"
       changed_when: false

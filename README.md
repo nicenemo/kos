@@ -8,20 +8,23 @@ discrete GPU, 12 GB RAM) running CachyOS with KDE Plasma. Layout and conventions
 ## Playbooks
 
 | Playbook | What it does |
-|---|---|
-| `base-setup.yml` | keyrings, full upgrade, common packages, user groups, `nvim` as editor |
-| `kernel-setup.yml` | `linux-cachyos` + headers, `intel-ucode` (stock `linux` stays as fallback) |
-| `intel-gpu-setup.yml` | Mesa, `vulkan-intel`, i965 VA-API (Broadwell is not supported by intel-media-driver), i915 options |
+| --- | --- |
+| `base-setup.yml` | keyrings, full upgrade, common packages (incl. neovim, jq), user groups, `nvim` as editor |
+| `kernel-setup.yml` | `linux-cachyos` + headers, `intel-ucode`, systemd-boot via `sdboot-manage`, default entry, sysctl |
+| `intel-gpu-setup.yml` | Mesa (iris), `vulkan-intel`, i965 VA-API (Broadwell is not supported by intel-media-driver), i915 |
 | `laptop-setup.yml` | `thermald`, weekly `fstrim.timer`, v4l/usb tools |
-| `flatpak-setup.yml`, `chrome-setup.yml` | Flatpak + Flathub, Google Chrome |
+| `flatpak-setup.yml`, `chrome-setup.yml` | Flatpak + Flathub, Google Chrome (as in samos) |
+| `desktop-setup.yml` | Vivaldi, Proton Mail, Moonlight |
 | `docker-setup.yml` | Docker + compose, `/opt/compose` |
-| `nachtgespenst-setup.yml` | build tooling for [nachtgespenst](https://github.com/nicenemo/nachtgespenst) |
+| `nachtgespenst-setup.yml` | build tooling for [nachtgespenst](https://github.com/nicenemo/nachtgespenst), no clone |
 
-`nachtgespenst-setup.yml` installs Python, esptool, CMake/Ninja, the JDK, system-wide JBang (`/opt/jbang`),
-udev rules and `uucp` membership for the M5Stack Core2/CoreS3 serial ports, clones the repo to
-`~/Projects/Nachtgespenst` and creates its project-local PlatformIO venv (`.pio/venv`). Switch the clone and venv off
-with `nachtgespenst_clone: false` / `nachtgespenst_bootstrap_pio: false` in `inventory.yml`. Log out and in again
-afterwards so the new `uucp` group applies.
+`nachtgespenst-setup.yml` installs `platformio-core` (+ its udev rules), esptool, CMake/Ninja, the JDK, system-wide
+JBang (`/opt/jbang`), the udev rules for the M5Stack Core2/CoreS3 serial ports (`files/99-kos-esp32-udev.rules`) and
+adds your user to `uucp`. Log out and in again afterwards so the group applies.
+
+The bootloader is systemd-boot managed by `systemd-boot-manager` (`/etc/sdboot-manage.conf`). Extra kernel options go
+in `kernel_options` (inventory) and end up in `/etc/sdboot-manage.conf.d/99-kos.conf`; `boot_default_entry` is set in
+`/boot/loader/loader.conf`.
 
 ## Usage
 
@@ -35,10 +38,9 @@ ansible-playbook playbooks/nachtgespenst-setup.yml   # a single part
 ansible-playbook setup.yml --check --diff    # dry run
 ```
 
-Requires `ansible`, `community.general`, `community.docker` and `ansible.posix` (already present on kos).
+Requires `ansible` (`ansible-galaxy collection install -r requirements.yml`), `community.general`, `community.docker` and `ansible.posix` (already present on kos).
 
 ## Notes
 
-* Kernel command line is not touched: `mitigations=off` is already set, and the boot loader entries are managed
-  outside this repo (see the multiberry/samos `kernel-setup.yml` if you want to manage `/etc/kernel/cmdline`).
-* Lint: `ansible-lint`, `yamllint .`
+* The CPU governor stays on power-profiles-daemon (unlike the always-on mikmakmuk nodes, this is a laptop).
+* Lint: `ansible-lint`, `yamllint .`, `markdownlint-cli2 "**/*.md"`

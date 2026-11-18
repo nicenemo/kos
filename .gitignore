@@ -47,7 +47,6 @@ Thumbs.db
 .ansible/
 *.retry
 *.log
-.ansible-lint
 
 # Ansible Galaxy Installed Roles & Collections
 roles/external/
@@ -76,4 +75,3 @@ build/**/*
 build/
 certs/
 credentials/
-# Nachtgespenst checkout is managed by playbooks/nachtgespenst-setup.yml, not part of this repo

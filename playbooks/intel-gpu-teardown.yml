@@ -10,8 +10,9 @@
         path: "{{ item }}"
         state: absent
       loop:
-        - /etc/environment.d/99-kos-vaapi.conf
+        - /etc/environment.d/99-kos-igpu-dri.conf
         - /etc/modprobe.d/99-kos-i915.conf
+        - /etc/modules-load.d/igpu.conf
 
     # mesa stays: the desktop depends on it.
     - name: Remove diagnostic and VA-API packages
@@ -19,5 +20,6 @@
         name:
           - libva-utils
           - intel-gpu-tools
+          - clinfo
           - vulkan-tools
         state: absent

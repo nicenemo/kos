@@ -1,20 +1,82 @@
 #!/usr/bin/env ansible-playbook
 ---
-- name: Install Intel Microcode and Optimized CachyOS Kernel
+- name: Install CachyOS Kernel and Configure systemd-boot (sdboot-manage)
   hosts: systems
   become: true
 
+  vars:
+    project_root: "{{ playbook_dir | dirname }}"
+    loader_conf: /boot/loader/loader.conf
+
   tasks:
-    - name: Install CachyOS kernel, headers and Intel microcode (stock linux kernel stays as fallback)
+    # -------------------------------------------------------------------------
+    # 1. Packages (the pacman hooks generate the boot entries via sdboot-manage)
+    # -------------------------------------------------------------------------
+    - name: Install systemd-boot-manager, CachyOS kernel, headers and Intel microcode
       community.general.pacman:
-        name:
-          - linux-cachyos
-          - linux-cachyos-headers
-          - intel-ucode
+        name: "{{ ['systemd-boot-manager'] + kernel_packages }}"
         state: present
       notify: Rebuild initramfs
+
+    # -------------------------------------------------------------------------
+    # 2. Kernel command line: drop-in for sdboot-manage (LINUX_OPTIONS is extended, /etc/sdboot-manage.conf stays)
+    # -------------------------------------------------------------------------
+    - name: Ensure the sdboot-manage drop-in directory exists
+      ansible.builtin.file:
+        path: /etc/sdboot-manage.conf.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Deploy kernel options drop-in
+      ansible.builtin.copy:
+        dest: /etc/sdboot-manage.conf.d/99-kos.conf
+        content: |
+          LINUX_OPTIONS+=" {{ kernel_options | join(' ') }}"
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Regenerate systemd-boot entries
+
+    # -------------------------------------------------------------------------
+    # 3. Default boot entry (DEFAULT_ENTRY is "manual", so loader.conf is ours)
+    # -------------------------------------------------------------------------
+    - name: Check that loader.conf exists
+      ansible.builtin.stat:
+        path: "{{ loader_conf }}"
+      register: loader_conf_stat
+
+    - name: Boot the CachyOS kernel by default
+      ansible.builtin.lineinfile:
+        path: "{{ loader_conf }}"
+        regexp: '^default\s'
+        line: "default {{ boot_default_entry }}"
+        insertbefore: BOF
+        mode: "0755"
+      when: loader_conf_stat.stat.exists
+
+    # -------------------------------------------------------------------------
+    # 4. Kernel sysctl tuning
+    # -------------------------------------------------------------------------
+    - name: Install sysctl tuning
+      ansible.builtin.copy:
+        src: "{{ project_root }}/files/99-kos-sysctl.conf"
+        dest: /etc/sysctl.d/99-kos.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Apply sysctl settings
 
   handlers:
     - name: Rebuild initramfs
       ansible.builtin.command: mkinitcpio -P
+      changed_when: true
+
+    - name: Regenerate systemd-boot entries
+      ansible.builtin.command: sdboot-manage gen
+      changed_when: true
+
+    - name: Apply sysctl settings
+      ansible.builtin.command: sysctl --system
       changed_when: true
