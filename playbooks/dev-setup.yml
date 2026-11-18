@@ -1,13 +1,10 @@
 #!/usr/bin/env ansible-playbook
 ---
-# Development tooling: PlatformIO, esptool, serial udev rules for ESP32 boards (M5Stack), JBang, JDK and build tools.
+# Development tooling: PlatformIO, esptool, JBang, JDK and build tools. udev rules are in udev-setup.yml.
 # Used for e.g. https://github.com/nicenemo/nachtgespenst, which is not cloned here.
 - name: Install Development Tooling
   hosts: systems
   become: true
-
-  vars:
-    project_root: "{{ playbook_dir | dirname }}"
 
   tasks:
     # -------------------------------------------------------------------------
@@ -29,25 +26,7 @@
         state: present
 
     # -------------------------------------------------------------------------
-    # 2. Serial access to the M5Stack boards
-    # -------------------------------------------------------------------------
-    - name: Add target user to uucp (serial ports)
-      ansible.builtin.user:
-        name: "{{ target_user }}"
-        groups: uucp
-        append: true
-
-    - name: Install udev rules for the ESP32 boards
-      ansible.builtin.copy:
-        src: "{{ project_root }}/files/99-kos-esp32-udev.rules"
-        dest: /etc/udev/rules.d/99-kos-esp32.rules
-        owner: root
-        group: root
-        mode: "0644"
-      notify: Reload udev
-
-    # -------------------------------------------------------------------------
-    # 3. JBang (system-wide)
+    # 2. JBang (system-wide)
     # -------------------------------------------------------------------------
     - name: Download JBang
       ansible.builtin.get_url:
@@ -67,8 +46,3 @@
         src: "{{ jbang_install_dir }}/bin/jbang"
         dest: /usr/local/bin/jbang
         state: link
-
-  handlers:
-    - name: Reload udev
-      ansible.builtin.command: udevadm control --reload-rules
-      changed_when: true

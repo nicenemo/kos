@@ -25,8 +25,9 @@ trigger `pam_faillock`: `sudo faillock --user kruse --reset`.
 
 ## No access to /dev/ttyACM0 or /dev/ttyUSB0
 
-Check `id`: the user must be in `uucp` (log in again after `dev-setup.yml`). Check that the rule matches the board with
-`udevadm info -a /dev/ttyACM0 | grep -E 'idVendor|idProduct'` and add the IDs to `files/99-kos-esp32-udev.rules`.
+Check `id`: the user must be in `uucp` (log in again after `udev-setup.yml`). Check that a rule matches the board with
+`udevadm info -a /dev/ttyACM0 | grep -E 'idVendor|idProduct'`, add the IDs to `files/99-kos-esp32-serial.rules` and run
+`udev-setup.yml`. For the Nachtgespenst hidraw node see `files/70-nachtgespenst-hidraw.rules`.
 
 ## Battery does not stop charging at 80 percent
 

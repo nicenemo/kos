@@ -1,6 +1,6 @@
 # 9. Development Tooling as a Generic Playbook
 
-* **Status:** Accepted
+* **Status:** Accepted; the udev part is superseded by [ADR 0012](./0012-separate-udev-playbooks.md)
 * **Date:** 2026-11-18
 
 ## Context

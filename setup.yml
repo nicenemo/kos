@@ -25,5 +25,8 @@
 - name: Import Docker Setup
   ansible.builtin.import_playbook: playbooks/docker-setup.yml
 
+- name: Import udev Rules Setup
+  ansible.builtin.import_playbook: playbooks/udev-setup.yml
+
 - name: Import Development Tooling Setup
   ansible.builtin.import_playbook: playbooks/dev-setup.yml

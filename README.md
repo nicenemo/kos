@@ -28,7 +28,8 @@ do not apply to this hardware (Elasticsearch, Kibana, gaming, Nvidia, local AI) 
 | `flatpak-setup.yml`, `chrome-setup.yml` | Flatpak + Flathub, Google Chrome |
 | `desktop-setup.yml` | Vivaldi, Proton Mail, Moonlight |
 | `docker-setup.yml` | Docker + compose, `/opt/compose` |
-| `dev-setup.yml` | development tooling: PlatformIO, esptool, JBang, JDK, ESP32 serial udev rules |
+| `udev-setup.yml` | udev rules and `uucp` for ESP32 serial adapters and the Nachtgespenst hidraw device |
+| `dev-setup.yml` | development tooling: PlatformIO, esptool, JBang, JDK, CMake/Ninja |
 
 Every `*-setup.yml` has a `*-teardown.yml`. `setup.yml` and `teardown.yml` import them in order and reverse order.
 
@@ -55,7 +56,7 @@ Step by step: [wiki/first-run.md](./wiki/first-run.md).
 
 All settings are in `inventory.yml`: `common_packages`, `kernel_packages`, `kernel_options`, `boot_default_entry`,
 `desktop_packages`, `battery_start_threshold` / `battery_stop_threshold`, `jbang_install_dir`. Static files are in
-`files/` (i915 options, iGPU environment, sysctl, ESP32 udev rules).
+`files/` (i915 options, iGPU environment, sysctl, udev rules for ESP32 boards and the Nachtgespenst hidraw device).
 
 ## Linting
 
@@ -93,3 +94,4 @@ repository is public and licensed under the [MIT License](./LICENSE), (c) 2026 H
   * [0009 Development tooling playbook](./adr/0009-development-tooling-playbook.md)
   * [0010 Scope and excluded workloads](./adr/0010-scope-and-excluded-workloads.md)
   * [0011 Secret scanning with a pre-commit hook](./adr/0011-secret-scanning-with-pre-commit-hook.md)
+  * [0012 Separate udev playbooks](./adr/0012-separate-udev-playbooks.md)

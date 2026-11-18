@@ -5,7 +5,7 @@
   become: true
 
   tasks:
-    - name: Remove JBang and udev rules
+    - name: Remove JBang
       ansible.builtin.file:
         path: "{{ item }}"
         state: absent
@@ -13,8 +13,6 @@
         - /usr/local/bin/jbang
         - "{{ jbang_install_dir }}"
         - /var/cache/jbang.zip
-        - /etc/udev/rules.d/99-kos-esp32.rules
-      notify: Reload udev
 
     - name: Remove PlatformIO and esptool
       community.general.pacman:
@@ -23,8 +21,3 @@
           - platformio-core-udev
           - esptool
         state: absent
-
-  handlers:
-    - name: Reload udev
-      ansible.builtin.command: udevadm control --reload-rules
-      changed_when: true

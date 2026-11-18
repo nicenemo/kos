@@ -47,6 +47,8 @@ There are no tests; the teardown, setup cycle is the idempotency test. All three
 * **Bootloader**: systemd-boot via `sdboot-manage` (ADR 0004), not Limine or `/etc/kernel/cmdline`. Kernel options go
   in `/etc/sdboot-manage.conf.d/99-kos.conf`; the default kernel is the `default` line in `/boot/loader/loader.conf`;
   regenerate entries with `sdboot-manage gen`. `/boot` is root-only.
+* **Development and udev**: `dev-setup.yml` installs packages only (PlatformIO, esptool, JBang, JDK). udev rules and the
+  `uucp` membership are in `udev-setup.yml` / `udev-teardown.yml` (ADR 0012); rule files are in `files/`.
 * **Graphics**: Broadwell needs `libva-intel-driver` (i965), not `intel-media-driver` (ADR 0008).
 * **Power**: TLP + thermald; power-profiles-daemon stays masked (ADR 0007).
 * **Path resolution**: playbooks under `playbooks/` define `project_root: "{{ playbook_dir | dirname }}"` to reach
