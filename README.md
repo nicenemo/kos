@@ -68,7 +68,7 @@ markdownlint-cli2 "**/*.md"
 ## Secret scanning
 
 Run `./githooks-setup.sh` once per checkout. The `pre-commit` hook in `.githooks/` runs `gitleaks` on the staged
-changes and `yamllint` ([ADR 0011](./adr/0011-secret-scanning-with-pre-commit-hook.md)). Scan the whole history with
+changes and `yamllint`, the `pre-push` hook runs `trufflehog` on the commits being pushed ([ADR 0011](./adr/0011-secret-scanning-with-pre-commit-hook.md)). Scan the whole history with
 `gitleaks git --redact`.
 
 ## Project page and licence

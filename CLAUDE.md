@@ -32,7 +32,7 @@ markdownlint-cli2 "**/*.md"     # .markdownlint-cli2.yaml (ignores playbooks/, a
 ```
 
 Secrets: the tracked `pre-commit` hook (`.githooks/`, enable with `./githooks-setup.sh`) runs `gitleaks git --staged`
-and `yamllint` (ADR 0011). Never commit private keys, tokens or vault passwords; never bypass with `--no-verify`.
+and `yamllint`; `.githooks/pre-push` runs `trufflehog` (ADR 0011). Never commit private keys, tokens or vault passwords; never bypass with `--no-verify`.
 
 There are no tests; the teardown, setup cycle is the idempotency test. All three linters must pass before a commit.
 

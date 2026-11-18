@@ -3,7 +3,7 @@
 Requirements: CachyOS with KDE, systemd-boot, a user `kruse` in `wheel`, `ansible`, `ansible-lint` and `yamllint`.
 
 ```bash
-./githooks-setup.sh                # enable the gitleaks + yamllint pre-commit hook
+./githooks-setup.sh                # enable the hooks; trufflehog (trufflehog-bin, AUR) must be installed
 ansible-galaxy collection install -r requirements.yml
 ./controller-setup.yml           # creates ~/.ssh/id_ed25519_ansible (no -K)
 ./ansible-user-setup.yml -K      # sshd on localhost, myansibleuser, NOPASSWD sudo
