@@ -8,3 +8,5 @@ Nachtgespenst tooling (PlatformIO, JBang, ESP32 udev rules; no clone) is in `pla
 Bootloader is systemd-boot via `sdboot-manage` (not Limine, not `/etc/kernel/cmdline`).
 Lint: `ansible-lint`, `yamllint .`.
 Broadwell needs the i965 VA-API driver (`libva-intel-driver`), not intel-media-driver.
+
+Access: SSH to 127.0.0.1 as `myansibleuser`; first run `./controller-setup.yml`, then `./ansible-user-setup.yml -K`.

@@ -28,14 +28,19 @@ in `kernel_options` (inventory) and end up in `/etc/sdboot-manage.conf.d/99-kos.
 
 ## Usage
 
-The machine configures itself (`connection: local`), so there is no ansible management user; `ansible.cfg` asks for
-your sudo password on every run.
+kos manages itself over SSH on `127.0.0.1` as `myansibleuser` (passwordless sudo, dedicated key
+`~/.ssh/id_ed25519_ansible`), like the mikmakmuk nodes. The bootstrap runs locally as `kruse` and also installs and
+enables `sshd`, restricted to localhost with key-only login.
 
 ```bash
-./setup.yml                                  # everything
-./teardown.yml                               # revert (keeps system-critical packages and your checkout)
+./controller-setup.yml          # create the ansible SSH keypair (no -K)
+./ansible-user-setup.yml -K     # sshd on localhost + myansibleuser with NOPASSWD sudo (needs -K)
+./setup.yml                     # everything (no -K)
+./teardown.yml                  # revert (keeps system-critical packages)
+./ansible-user-teardown.yml -K  # remove myansibleuser and the localhost sshd config
+./controller-teardown.yml       # delete the keypair
 ansible-playbook playbooks/nachtgespenst-setup.yml   # a single part
-ansible-playbook setup.yml --check --diff    # dry run
+ansible-playbook setup.yml --check --diff            # dry run
 ```
 
 Requires `ansible` plus the collections in `requirements.yml` (`ansible-galaxy collection install -r requirements.yml`).
