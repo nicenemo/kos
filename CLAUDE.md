@@ -61,5 +61,8 @@ There are no tests; the teardown, setup cycle is the idempotency test. All three
   `firestorm_users`, and grep for `multiberry`, `samos` and `hanskruse` before committing.
 * **Project page**: `index.html` (the only tracked HTML file, `*.html` is gitignored otherwise) is deployed to GitHub
   Pages by `.github/workflows/static.yml`. Keep it short and plain; keep it in step with the README playbook list.
+  `style.css`, `menu.js`, `hero-bg.svg` and `favicon.svg` are identical in kos, mikmakmuk, multiberry and samos (menu
+  and wave banner as on the nachtgespenst site, without its ghost); change them in all four. The `hanskruse.eu` button
+  is always the last button of the banner.
 * **Docs**: new decisions get the next ADR number in `adr/` and a line in the README list; how-to content goes in
   `wiki/`.

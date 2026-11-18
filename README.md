@@ -76,8 +76,11 @@ changes and `yamllint`; the `pre-push` hook runs `trufflehog` on the commits bei
 
 ## Project page and licence
 
-`index.html` is published with GitHub Pages by `.github/workflows/static.yml` (only that file is deployed). The
-repository is public and licensed under the [MIT License](./LICENSE), (c) 2026 Hans Kruse.
+`index.html` is published with GitHub Pages by `.github/workflows/static.yml`; only the page files `index.html`,
+`style.css`, `menu.js`, `hero-bg.svg` and `favicon.svg` are deployed. The layout (bar with menu, wave banner with a
+`hanskruse.eu` button, footer), the shared files, the workflow and the licence are the same in all the playbook
+repositories (kos, mikmakmuk, multiberry, samos). The repository is public and licensed under the
+[MIT License](./LICENSE), (c) 2026 Hans Kruse.
 
 ## Documentation
 
