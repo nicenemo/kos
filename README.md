@@ -22,8 +22,8 @@ do not apply to this hardware (Elasticsearch, Kibana, gaming, Nvidia, local AI) 
 | Playbook | What it does |
 | --- | --- |
 | `base-setup.yml` | keyrings, full upgrade, common packages (neovim, jq, tmux, btop, ...), groups, `nvim` as editor |
-| `kernel-setup.yml` | `linux-cachyos`, headers, `intel-ucode`, sdboot-manage options, default entry, sysctl tuning |
-| `intel-gpu-setup.yml` | Mesa (iris), `vulkan-intel`, i965 VA-API, i915 options |
+| `kernel-setup.yml` | `linux-cachyos`, headers, `intel-ucode`, sdboot-manage options, default entry, sysctl, i915 module options |
+| `intel-gpu-setup.yml` | Mesa (iris), `vulkan-intel`, i965 VA-API driver and environment |
 | `laptop-setup.yml` | TLP (battery thresholds) + `thermald`, power-profiles-daemon masked, weekly `fstrim.timer` |
 | `flatpak-setup.yml`, `chrome-setup.yml` | Flatpak + Flathub, Google Chrome |
 | `desktop-setup.yml` | Vivaldi, Proton Mail, Moonlight |

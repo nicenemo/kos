@@ -30,6 +30,8 @@
       loop:
         - /etc/sdboot-manage.conf.d/99-kos.conf
         - /etc/sysctl.d/99-kos.conf
+        - /etc/modprobe.d/99-kos-i915.conf
+        - /etc/modules-load.d/igpu.conf
 
     # intel-ucode and systemd-boot-manager stay: the machine must remain bootable.
     # The pacman hook removes the boot entries of the removed kernel.

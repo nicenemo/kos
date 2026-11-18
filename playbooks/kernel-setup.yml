@@ -97,6 +97,26 @@
       notify: Apply sysctl settings
 
     # -------------------------------------------------------------------------
+    # 4. Kernel modules: i915 options and loading at boot (as the iGPU setup of mikmakmuk does in kernel-setup)
+    # -------------------------------------------------------------------------
+    - name: Install i915 module options
+      ansible.builtin.copy:
+        src: "{{ project_root }}/files/99-kos-i915.conf"
+        dest: /etc/modprobe.d/99-kos-i915.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Rebuild initramfs
+
+    - name: Ensure the i915 module is loaded at boot
+      ansible.builtin.copy:
+        content: "i915\n"
+        dest: /etc/modules-load.d/igpu.conf
+        owner: root
+        group: root
+        mode: "0644"
+
+    # -------------------------------------------------------------------------
     # 5. Verification (no automatic reboot: this play runs on the machine itself)
     # -------------------------------------------------------------------------
     - name: Read the running kernel command line

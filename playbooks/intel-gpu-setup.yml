@@ -37,19 +37,3 @@
         owner: root
         group: root
         mode: "0644"
-
-    - name: Install i915 module options
-      ansible.builtin.copy:
-        src: "{{ project_root }}/files/99-kos-i915.conf"
-        dest: /etc/modprobe.d/99-kos-i915.conf
-        owner: root
-        group: root
-        mode: "0644"
-
-    - name: Ensure the i915 module is loaded at boot
-      ansible.builtin.copy:
-        content: "i915\n"
-        dest: /etc/modules-load.d/igpu.conf
-        owner: root
-        group: root
-        mode: "0644"
