@@ -29,7 +29,7 @@ do not apply to this hardware (Elasticsearch, Kibana, gaming, Nvidia, local AI) 
 | `desktop-setup.yml` | Vivaldi, Proton Mail, Moonlight |
 | `docker-setup.yml` | Docker + compose, `/opt/compose` |
 | `udev-setup.yml` | udev rules and `uucp` for ESP32 serial adapters and the Nachtgespenst hidraw device |
-| `dev-setup.yml` | development tooling: PlatformIO, esptool, JBang, JDK, CMake/Ninja |
+| `dev-setup.yml` | development tooling: PlatformIO, esptool, JBang, JDK, Hugo, CMake/Ninja |
 | `jdtls-setup.yml` | jdtls (Eclipse JDT language server) as a locally built pacman package: `jdtls-download`, `-package`, `-distribute`, `-install`, `-remove-package` |
 
 Every `*-setup.yml` has a `*-teardown.yml`. `setup.yml` and `teardown.yml` import them in order and reverse order.

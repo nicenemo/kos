@@ -20,4 +20,5 @@
           - platformio-core
           - platformio-core-udev
           - esptool
+          - hugo
         state: absent
