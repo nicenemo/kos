@@ -24,11 +24,12 @@ do not apply to this hardware (Elasticsearch, Kibana, gaming, Nvidia, local AI) 
 | `base-setup.yml` | keyrings, full upgrade, common packages (neovim, jq, tmux, btop, ...), groups, `nvim` as editor |
 | `kernel-setup.yml` | `linux-cachyos`, headers, `intel-ucode`, sdboot-manage options, default entry, sysctl, i915 module options |
 | `intel-gpu-setup.yml` | Mesa (iris), `vulkan-intel`, i965 VA-API driver and environment |
-| `laptop-setup.yml` | TLP (battery thresholds) + `thermald`, power-profiles-daemon masked, weekly `fstrim.timer` |
+| `laptop-setup.yml` | TLP (battery thresholds, performance governor on AC, no USB autosuspend for Bluetooth controllers and the Nachtgespenst pad) + `thermald`, power-profiles-daemon masked, weekly `fstrim.timer` |
 | `flatpak-setup.yml`, `chrome-setup.yml` | Flatpak + Flathub, Google Chrome |
 | `desktop-setup.yml` | Vivaldi, Proton Mail, Moonlight |
 | `docker-setup.yml` | Docker + compose, `/opt/compose` |
 | `udev-setup.yml` | udev rules and `uucp` for ESP32 serial adapters and the Nachtgespenst hidraw device |
+| `bluez-setup.yml` | short LE connection intervals in `/etc/bluetooth/main.conf` for Bluetooth HID (restarts `bluetooth`) |
 | `dev-setup.yml` | development tooling: PlatformIO, esptool, JBang, JDK, Hugo, Jekyll, CMake/Ninja |
 | `jdtls-setup.yml` | jdtls (Eclipse JDT language server) as a locally built pacman package: `jdtls-download`, `-package`, `-distribute`, `-install`, `-remove-package` |
 
@@ -102,3 +103,4 @@ repositories (kos, mikmakmuk, multiberry, samos). The repository is public and l
   * [0012 Separate udev playbooks](./adr/0012-separate-udev-playbooks.md)
   * [0013 jdtls as a locally built package](./adr/0013-jdtls-as-locally-built-package.md)
   * [0014 Linters in the pre-commit hook](./adr/0014-linters-in-the-pre-commit-hook.md)
+  * [0015 BlueZ LE connection parameters](./adr/0015-bluez-le-connection-parameters.md)
