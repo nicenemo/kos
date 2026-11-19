@@ -13,7 +13,7 @@ the commits. The format loosely follows [Keep a Changelog](https://keepachangelo
 * jdtls as a locally built pacman package (`jdtls-*` playbooks, [ADR 0013](./adr/0013-jdtls-as-locally-built-package.md)).
 * Hugo, Jekyll, actionlint and osv-scanner; `ansible-lint`, `yamllint` and `markdownlint-cli2` in the pre-commit hook
   ([ADR 0014](./adr/0014-linters-in-the-pre-commit-hook.md)).
-* This changelog.
+* This changelog, and the rules for keeping it, the README, the site and the ADRs up to date (`CLAUDE.md`).
 
 ### Changed
 
