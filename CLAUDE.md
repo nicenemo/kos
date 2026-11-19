@@ -68,3 +68,17 @@ There are no tests; the teardown, setup cycle is the idempotency test. All three
   is always the last button of the banner.
 * **Docs**: new decisions get the next ADR number in `adr/` and a line in the README list; how-to content goes in
   `wiki/`.
+
+## Keeping the documentation up to date
+
+This is the one place for these rules ([AGENTS.md](./AGENTS.md) only points here). With every change that is committed
+to `main`, in the same commit or the next one on the same day:
+
+* **`CHANGELOG.md`**: add an entry under today's date (`### Added`, `### Changed`, `### Fixed`), newest day first, one
+  line per change, with a link to the ADR when there is one. Changes that stay on an unmerged branch are listed once
+  under `### Branches` for that day, not as normal entries. Use British English; no entry for pure typo fixes.
+* **`README.md`**: a new or changed playbook updates the playbook table, a new ADR gets a line in the ADR list.
+* **`index.html`**: keep the feature list in step with the README (short and plain).
+* **ADR**: a deliberate choice (a tunable, a service, a parameter that costs battery or changes the boot) gets a new
+  ADR or an update of the existing one, with the measurement or reason.
+* Run the three linters (above) before committing.
