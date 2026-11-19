@@ -20,7 +20,6 @@
         path: /etc/bluetooth/main.conf
         regexp: "^#?{{ item.key }}\\s*="
         line: "{{ item.key }} = {{ item.value }}"
-        backup: true
       loop: "{{ bluez_le_parameters | dict2items }}"
       loop_control:
         label: "{{ item.key }}"
