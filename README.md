@@ -88,6 +88,7 @@ repositories (kos, mikmakmuk, multiberry, samos). The repository is public and l
 
 * [Wiki](./wiki/): [first run](./wiki/first-run.md), [troubleshooting](./wiki/troubleshooting.md),
   [development tooling](./wiki/development-tooling.md)
+* Changes per day: [`CHANGELOG.md`](./CHANGELOG.md)
 * Architecture decisions in [`adr/`](./adr/):
   * [0001 Record architecture decisions](./adr/0001-record-architecture-decisions.md)
   * [0002 Ansible for declarative automation](./adr/0002-ansible-for-declarative-automation.md)
