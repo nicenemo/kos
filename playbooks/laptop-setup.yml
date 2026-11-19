@@ -53,6 +53,19 @@
         mode: '0644'
       notify: Apply TLP settings
 
+    - name: Configure TLP for hardware tests (no USB autosuspend, performance governor on battery too)
+      ansible.builtin.copy:
+        dest: /etc/tlp.d/98-kos-lamp-tests.conf
+        content: |
+          # Test-only (branch lamp-test-tuning): costs battery life. Removed by laptop-teardown.yml.
+          # TLP puts every USB device on autosuspend unless told not to, which overrides usbcore.autosuspend.
+          USB_AUTOSUSPEND=0
+          CPU_SCALING_GOVERNOR_ON_BAT=performance
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Apply TLP settings
+
     - name: Enable TLP, thermald and weekly TRIM
       ansible.builtin.systemd:
         name: "{{ item }}"

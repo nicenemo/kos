@@ -5,10 +5,13 @@
   become: true
 
   tasks:
-    - name: Remove the kos TLP drop-in
+    - name: Remove the kos TLP drop-ins
       ansible.builtin.file:
-        path: /etc/tlp.d/99-kos.conf
+        path: "/etc/tlp.d/{{ item }}"
         state: absent
+      loop:
+        - 99-kos.conf
+        - 98-kos-lamp-tests.conf
 
     - name: Unmask the rfkill units
       ansible.builtin.systemd:
