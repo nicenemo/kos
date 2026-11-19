@@ -1,0 +1,33 @@
+#!/usr/bin/env ansible-playbook
+---
+# Short LE connection intervals for HID over Bluetooth. The Nachtgespenst boards ask for 7.5 to 15 ms; BlueZ's default
+# of about 30 to 50 ms limits them to roughly 30 reports per second.
+- name: Tune BlueZ LE Connection Parameters
+  hosts: systems
+  become: true
+
+  vars:
+    # Units of 1.25 ms (6 = 7.5 ms, 9 = 11.25 ms); the supervision timeout is in units of 10 ms (400 = 4 s).
+    bluez_le_parameters:
+      MinConnectionInterval: 6
+      MaxConnectionInterval: 9
+      ConnectionLatency: 0
+      ConnectionSupervisionTimeout: 400
+
+  tasks:
+    - name: Set the LE default connection parameters in main.conf
+      ansible.builtin.lineinfile:
+        path: /etc/bluetooth/main.conf
+        regexp: "^#?{{ item.key }}\\s*="
+        line: "{{ item.key }} = {{ item.value }}"
+        backup: true
+      loop: "{{ bluez_le_parameters | dict2items }}"
+      loop_control:
+        label: "{{ item.key }}"
+      notify: Restart bluetooth
+
+  handlers:
+    - name: Restart bluetooth
+      ansible.builtin.systemd:
+        name: bluetooth
+        state: restarted

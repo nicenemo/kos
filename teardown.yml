@@ -6,6 +6,9 @@
 - name: Import Development Tooling Teardown
   ansible.builtin.import_playbook: playbooks/dev-teardown.yml
 
+- name: Import BlueZ Connection Parameters Teardown
+  ansible.builtin.import_playbook: playbooks/bluez-teardown.yml
+
 - name: Import udev Rules Teardown
   ansible.builtin.import_playbook: playbooks/udev-teardown.yml
 

@@ -28,6 +28,9 @@
 - name: Import udev Rules Setup
   ansible.builtin.import_playbook: playbooks/udev-setup.yml
 
+- name: Import BlueZ Connection Parameters Setup
+  ansible.builtin.import_playbook: playbooks/bluez-setup.yml
+
 - name: Import Development Tooling Setup
   ansible.builtin.import_playbook: playbooks/dev-setup.yml
 

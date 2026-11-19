@@ -1,0 +1,24 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Remove BlueZ LE Connection Parameters
+  hosts: systems
+  become: true
+
+  tasks:
+    - name: Comment the LE default connection parameters out again
+      ansible.builtin.lineinfile:
+        path: /etc/bluetooth/main.conf
+        regexp: "^#?{{ item }}\\s*="
+        line: "#{{ item }}="
+      loop:
+        - MinConnectionInterval
+        - MaxConnectionInterval
+        - ConnectionLatency
+        - ConnectionSupervisionTimeout
+      notify: Restart bluetooth
+
+  handlers:
+    - name: Restart bluetooth
+      ansible.builtin.systemd:
+        name: bluetooth
+        state: restarted
