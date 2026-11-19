@@ -16,7 +16,9 @@ TLP and PPD conflict; TLP and thermald do not.
   that TLP replaces.
 * TLP battery charge thresholds for the internal battery (BAT0) are set from `battery_start_threshold` and
   `battery_stop_threshold` (75 and 80 percent) in `/etc/tlp.d/99-kos.conf`.
-* The CPU governor is not forced to `performance`.
+* The CPU governor is `performance` on AC (`CPU_SCALING_GOVERNOR_ON_AC`); on battery TLP's profile decides.
+* USB autosuspend stays on, except for Bluetooth controllers (`USB_EXCLUDE_BTUSB=1`) and the Nachtgespenst pad
+  (`USB_DENYLIST` 1209:0001): a sleeping controller delays the first input of a Bluetooth keyboard or mouse.
 * `fstrim.timer` is enabled for the SSD.
 
 ## Consequences

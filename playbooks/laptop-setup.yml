@@ -1,6 +1,7 @@
 #!/usr/bin/env ansible-playbook
 ---
-# Power management for the T450s: TLP (power, battery thresholds via thinkpad_acpi) + thermald (thermal).
+# Power management for the T450s: TLP (power, governor on AC, USB autosuspend exceptions, battery thresholds via
+# thinkpad_acpi) + thermald (thermal).
 # They complement each other. power-profiles-daemon conflicts with TLP and stays masked.
 - name: Apply ThinkPad T450s Laptop Settings
   hosts: systems
@@ -39,6 +40,14 @@
           # Managed by the kos playbooks (laptop-setup.yml)
           START_CHARGE_THRESH_BAT0={{ battery_start_threshold }}
           STOP_CHARGE_THRESH_BAT0={{ battery_stop_threshold }}
+
+          # Performance governor on AC; on battery TLP's own profile decides
+          CPU_SCALING_GOVERNOR_ON_AC=performance
+
+          # USB autosuspend stays on, except for Bluetooth controllers (a sleeping controller delays the first
+          # keypress or mouse move of a Bluetooth device) and the Nachtgespenst macro pad (1209:0001)
+          USB_EXCLUDE_BTUSB=1
+          USB_DENYLIST="1209:0001"
         owner: root
         group: root
         mode: '0644'
