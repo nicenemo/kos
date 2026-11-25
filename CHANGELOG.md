@@ -3,6 +3,13 @@
 All notable changes to the kos playbooks. The project has no tagged releases, so entries are grouped by day and follow
 the commits. The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 2026-11-25
+
+### Fixed
+
+* `.githooks/pre-push`: trufflehog runs with `--no-update`. The self-update cannot replace a root-owned install
+  (`cannot move binary`) and the hook reported that error as a finding, which blocked every push.
+
 ## 2026-11-19
 
 ### Added
