@@ -1,0 +1,72 @@
+#!/usr/bin/env ansible-playbook
+---
+# The root side of the HID-BPF loader of the Nachtgespenst pad (Compose and Kana LEDs, locking keys): the packages,
+# the udev rule that starts the loader when the board appears, and the systemd unit that gives it exactly the
+# capabilities it needs. The loader itself is built in the nachtgespenst repository (docs/plans/hid-ebpf-leds.md);
+# until its jar is installed nothing runs (ADR 0016).
+- name: Set up the HID-BPF Loader for the Nachtgespenst Pad
+  hosts: systems
+  become: true
+
+  vars:
+    project_root: "{{ playbook_dir | dirname }}"
+    hid_bpf_dir: /opt/nachtgespenst-hid-bpf
+    # Set to the built loader.jar to install it: -e hid_bpf_loader_jar=/path/to/loader.jar
+    hid_bpf_loader_jar: ''
+
+  tasks:
+    # ---- tools that compile and inspect BPF programs
+    - name: Install the BPF tools
+      community.general.pacman:
+        name: "{{ hid_bpf_packages }}"
+        state: present
+
+    # ---- the loader and its start rule
+    - name: 'Create the loader directory, owned by root (whoever can change the jar can load kernel code)'
+      ansible.builtin.file:
+        path: "{{ hid_bpf_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Install the loader jar when one is given
+      ansible.builtin.copy:
+        src: "{{ hid_bpf_loader_jar }}"
+        dest: "{{ hid_bpf_dir }}/loader.jar"
+        owner: root
+        group: root
+        mode: '0644'
+      when: hid_bpf_loader_jar | length > 0
+
+    - name: Install the systemd unit
+      ansible.builtin.copy:
+        src: "{{ project_root }}/files/nachtgespenst-hid-bpf@.service"
+        dest: /etc/systemd/system/nachtgespenst-hid-bpf@.service
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Reload systemd
+
+    - name: Install the udev rule
+      ansible.builtin.copy:
+        src: "{{ project_root }}/files/71-nachtgespenst-hid-bpf.rules"
+        dest: /etc/udev/rules.d/71-nachtgespenst-hid-bpf.rules
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Reload udev
+
+  handlers:
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
+
+    - name: Reload udev
+      ansible.builtin.command: udevadm control --reload-rules
+      changed_when: true
+      notify: Apply udev rule to present devices
+
+    - name: Apply udev rule to present devices
+      ansible.builtin.command: udevadm trigger --subsystem-match=hid --action=add
+      changed_when: true

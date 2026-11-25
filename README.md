@@ -31,6 +31,7 @@ do not apply to this hardware (Elasticsearch, Kibana, gaming, Nvidia, local AI) 
 | `udev-setup.yml` | udev rules and `uucp` for ESP32 serial adapters and the Nachtgespenst hidraw device |
 | `bluez-setup.yml` | short LE connection intervals in `/etc/bluetooth/main.conf` for Bluetooth HID (restarts `bluetooth`) |
 | `dev-setup.yml` | development tooling: PlatformIO, esptool, JBang, JDK, Hugo, Jekyll, CMake/Ninja |
+| `hid-bpf-setup.yml` | the root side of the HID-BPF loader of the Nachtgespenst pad: BPF tools, a udev rule that starts the loader when the board appears, a systemd unit with only the capabilities it needs (inert until `loader.jar` is installed) |
 | `jdtls-setup.yml` | jdtls (Eclipse JDT language server) as a locally built pacman package: `jdtls-download`, `-package`, `-distribute`, `-install`, `-remove-package` |
 
 Every `*-setup.yml` has a `*-teardown.yml`. `setup.yml` and `teardown.yml` import them in order and reverse order.
@@ -105,3 +106,4 @@ repositories (kos, mikmakmuk, multiberry, samos). The repository is public and l
   * [0013 jdtls as a locally built package](./adr/0013-jdtls-as-locally-built-package.md)
   * [0014 Linters in the pre-commit hook](./adr/0014-linters-in-the-pre-commit-hook.md)
   * [0015 BlueZ LE connection parameters](./adr/0015-bluez-le-connection-parameters.md)
+  * [0016 The HID-BPF loader as a system service started by udev](./adr/0016-hid-bpf-loader-as-udev-started-system-service.md)

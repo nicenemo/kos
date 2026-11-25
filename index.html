@@ -41,6 +41,7 @@
     <li><b>Laptop:</b> TLP with battery charge thresholds, performance governor on AC and no USB autosuspend for Bluetooth controllers, thermald, weekly TRIM.</li>
     <li><b>Bluetooth:</b> short LE connection intervals for HID devices, set in BlueZ's <code>main.conf</code>.</li>
     <li><b>Desktop:</b> Flatpak, Chrome, Vivaldi, Proton Mail, Moonlight, Docker.</li>
+    <li><b>HID-BPF:</b> the root side of a loader for the Nachtgespenst pad: a udev rule starts a systemd unit that has only the capabilities it needs.</li>
     <li><b>Development:</b> PlatformIO, esptool, JBang, the JDK, Hugo, Jekyll and jdtls, plus separate udev rules for ESP32 boards.</li>
   </ul>
   <p>Every setup playbook has a teardown. Secrets are scanned with gitleaks in a pre-commit hook.</p>

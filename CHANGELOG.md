@@ -3,6 +3,15 @@
 All notable changes to the kos playbooks. The project has no tagged releases, so entries are grouped by day and follow
 the commits. The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 2026-11-25
+
+### Added
+
+* `hid-bpf-setup.yml` and `hid-bpf-teardown.yml`: the root side of the HID-BPF loader of the Nachtgespenst pad (BPF
+  packages, udev rule `71-nachtgespenst-hid-bpf.rules`, systemd unit `nachtgespenst-hid-bpf@.service` with
+  `CAP_BPF`, `CAP_PERFMON` and `CAP_SYS_ADMIN` only, loader directory `/opt/nachtgespenst-hid-bpf`); registered in
+  `setup.yml` and `teardown.yml` ([ADR 0016](./adr/0016-hid-bpf-loader-as-udev-started-system-service.md)).
+
 ## 2026-11-19
 
 ### Added

@@ -36,3 +36,6 @@
 
 - name: Import jdtls Setup
   ansible.builtin.import_playbook: playbooks/jdtls-setup.yml
+
+- name: Import HID-BPF Loader Setup
+  ansible.builtin.import_playbook: playbooks/hid-bpf-setup.yml
