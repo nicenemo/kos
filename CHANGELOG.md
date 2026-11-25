@@ -5,6 +5,11 @@ the commits. The format loosely follows [Keep a Changelog](https://keepachangelo
 
 ## 2026-11-25
 
+### Fixed
+
+* `.githooks/pre-push`: trufflehog runs with `--no-update`. The self-update cannot replace a root-owned install
+  (`cannot move binary`) and the hook reported that error as a finding, which blocked every push.
+
 ### Added
 
 * `hid-bpf-setup.yml` and `hid-bpf-teardown.yml`: the root side of the HID-BPF loader of the Nachtgespenst pad (BPF
