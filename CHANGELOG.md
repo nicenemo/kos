@@ -3,6 +3,15 @@
 All notable changes to the kos playbooks. The project has no tagged releases, so entries are grouped by day and follow
 the commits. The format loosely follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## 2026-11-26
+
+### Branches
+
+* `nachtgespenst`: `udev-setup.yml` and `udev-teardown.yml` install and remove `72-nachtgespenst-input.rules`, which
+  opens the `/dev/input/eventN` nodes of the Nachtgespenst pad to the logged-in user (`uaccess`, matched on the HID
+  device like the hidraw rule), so that `SerialTest` can grab the keyboard of the board. The trigger of the playbook
+  now includes the `input` subsystem.
+
 ## 2026-11-25
 
 ### Fixed

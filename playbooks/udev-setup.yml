@@ -14,6 +14,9 @@
       # hidraw access for the Nachtgespenst macro pad (USB and Bluetooth, ID 1209:0001)
       - src: 70-nachtgespenst-hidraw.rules
         dest: 70-nachtgespenst-hidraw.rules
+      # /dev/input/eventN of the board for the logged-in user (SerialTest grabs its keyboard and reads the host LEDs)
+      - src: 72-nachtgespenst-input.rules
+        dest: 72-nachtgespenst-input.rules
 
   tasks:
     - name: Add target user to uucp (serial ports)
@@ -41,5 +44,6 @@
       notify: Apply udev rules to present devices
 
     - name: Apply udev rules to present devices
-      ansible.builtin.command: udevadm trigger --subsystem-match=tty --subsystem-match=hidraw --subsystem-match=usb
+      ansible.builtin.command: >-
+        udevadm trigger --subsystem-match=tty --subsystem-match=hidraw --subsystem-match=usb --subsystem-match=input
       changed_when: true

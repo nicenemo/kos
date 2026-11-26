@@ -12,6 +12,7 @@
       loop:
         - 99-kos-esp32.rules
         - 70-nachtgespenst-hidraw.rules
+        - 72-nachtgespenst-input.rules
       notify: Reload udev
 
     - name: Remove target user from uucp
